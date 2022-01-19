@@ -4,6 +4,7 @@ const xlsx = require('node-xlsx');
 const RPA_CHALLENGE_URL = 'http://www.rpachallenge.com/';
 const CHALLENGE_XLSX_FILE = `${__dirname}/challenge.xlsx`;
 const IS_HEADLESS = true;
+const REPEAT_TIMES = 10;
 
 const rpaSelectors = {
 	start: 'body > app-root > div > app-rpa1 > div > div > div > button',
@@ -76,23 +77,28 @@ const goToNextPage = async (pageRPA) => {
 	await pageRPA.click(rpaSelectors['submitButton']);
 };
 
-const printResults = async (pageRPA) => {
+const getResults = async (pageRPA) => {
 	await pageRPA.waitForSelector(rpaSelectors['result']);
 	const result = await pageRPA.evaluate(`document.querySelector("${rpaSelectors['result']}").innerText`);
-	console.log('FINISH! Result:\n', result);
+	console.log(`Results: ${result}`);
+	return parseFloat(result.split('in ').pop().split(' ')[0]);
 };
 
 (async () => {
 	const usersData = getUserData();
-	const browser = await puppeteer.launch({ headless: IS_HEADLESS });
+	const browser = await puppeteer.launch({ headless: IS_HEADLESS, devtools: false });
 	const { pageRPA } = await configPages(browser);
-	await openRpaChallenge(pageRPA);
-	await start(pageRPA);
 
-	console.log('Start filling data!');
-	for (let userData of usersData) {
-		await fillUserData(pageRPA, userData);
-		await goToNextPage(pageRPA);
+	let averageTime = 0;
+	for (let repeat = 0; repeat < REPEAT_TIMES; repeat++) {
+		await openRpaChallenge(pageRPA);
+		await start(pageRPA);
+		for (let userData of usersData) {
+			await fillUserData(pageRPA, userData);
+			await goToNextPage(pageRPA);
+		}
+		averageTime += await getResults(pageRPA);
 	}
-	await printResults(pageRPA);
+	console.log(`Average time: ${averageTime / REPEAT_TIMES} milliseconds`);
+	process.exit(0);
 })();
