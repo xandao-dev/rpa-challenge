@@ -1,0 +1,16 @@
+{
+  "name": "rpa-challenge",
+  "version": "1.0.0",
+  "description": "Solve the RPA challenge found at https://rpachallenge.com",
+  "main": "solve.js",
+  "dependencies": {
+    "node-xlsx": "^0.21.0",
+    "puppeteer": "^5.3.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node solve.js"
+  },
+  "author": "Alexandre Calil Martins Fonseca",
+  "license": "MIT"
+}
