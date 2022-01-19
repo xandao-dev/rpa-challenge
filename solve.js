@@ -64,16 +64,7 @@ const fillUserData = async (pageRPA, userData) => {
 		await pageRPA.evaluate(`document.querySelector("${rpaSelectors['email']}").value = "${userData.email}"`);
 		await pageRPA.evaluate(`document.querySelector("${rpaSelectors['phone']}").value = "${userData.phone}"`);
 	} else {
-		while (name) {
-			name = await pageRPA.evaluate(`document.querySelector("${rpaSelectors['name']}").value`);
-		}
-		await pageRPA.evaluate(`document.querySelector("${rpaSelectors['name']}").value = "${userData.name}"`);
-		await pageRPA.evaluate(`document.querySelector("${rpaSelectors['lastName']}").value = "${userData.lastName}"`);
-		await pageRPA.evaluate(`document.querySelector("${rpaSelectors['company']}").value = "${userData.company}"`);
-		await pageRPA.evaluate(`document.querySelector("${rpaSelectors['role']}").value = "${userData.role}"`);
-		await pageRPA.evaluate(`document.querySelector("${rpaSelectors['address']}").value = "${userData.address}"`);
-		await pageRPA.evaluate(`document.querySelector("${rpaSelectors['email']}").value = "${userData.email}"`);
-		await pageRPA.evaluate(`document.querySelector("${rpaSelectors['phone']}").value = "${userData.phone}"`);
+		console.log('User already filled');
 	}
 };
 
