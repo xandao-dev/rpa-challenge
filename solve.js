@@ -32,11 +32,16 @@ const configPages = async (browser) => {
 	const pages = await browser.pages();
 	const pageRPA = pages[0];
 
-	//await pageRPA.setRequestInterception(true);
-	//pageRPA.on('request', (req) => req.resourceType() === 'image' ? req.abort() : req.continue());
-	//pageRPA.on('request', (req) => (req.resourceType() === 'stylesheet' || req.resourceType() === 'font') ? req.abort() : req.continue());
-
 	await pageRPA.setDefaultNavigationTimeout(0);
+	await pageRPA.setRequestInterception(true);
+
+	pageRPA.on('request', (req) => {
+		if (req.resourceType() === 'image' || req.resourceType() === 'font' || req.resourceType() === 'stylesheet') {
+			req.abort();
+		} else {
+			req.continue();
+		}
+	});
 	return { pageRPA };
 };
 
