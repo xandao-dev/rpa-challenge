@@ -112,7 +112,10 @@ Contributions are what make the open source community such an amazing place to b
 <!-- LICENSE -->
 ## License
 
-All rights reserved.
+Distributed under the MIT License. See [LICENSE](./LICENSE.md) for more information.
+
+Free software =)
+
 
 <!-- CONTACT -->
 ## Contact
